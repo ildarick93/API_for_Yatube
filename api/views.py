@@ -2,9 +2,9 @@ from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from .models import Post
+from .models import Group, Post
 from .permissions import IsOwnerOrReadOnly
-from .serializers import CommentSerializer, PostSerializer
+from .serializers import CommentSerializer, GroupSerializer, PostSerializer
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -35,3 +35,10 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         serializer.save(author=self.request.user)
+
+
+class GroupViewSet(viewsets.ModelViewSet):
+
+    serializer_class = GroupSerializer
+
+    queryset = Group.objects.all()
