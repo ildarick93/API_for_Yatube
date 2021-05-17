@@ -7,10 +7,10 @@ from rest_framework_simplejwt.views import (TokenObtainPairView,
 from .views import CommentViewSet, FollowViewSet, GroupViewSet, PostViewSet
 
 router = DefaultRouter()
-router.register('posts', PostViewSet)
+router.register('posts', PostViewSet, 'Post')
 router.register(r'posts/(?P<id>[0-9]+)/comments', CommentViewSet, 'Comments')
-router.register('group', GroupViewSet)
-router.register('follow', FollowViewSet)
+router.register('group', GroupViewSet, 'Group')
+router.register('follow', FollowViewSet, 'Follow')
 
 urlpatterns = [
     path('', include(router.urls)),
