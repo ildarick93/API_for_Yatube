@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+import django_filters.rest_framework
 from rest_framework import filters, viewsets
 from rest_framework.permissions import (IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
@@ -13,18 +14,11 @@ class PostViewSet(viewsets.ModelViewSet):
 
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
-
-    def get_queryset(self):
-        queryset = Post.objects.all()
-        group = self.request.query_params.get('group', None)
-        if group is not None:
-            queryset = queryset.filter(group=group)
-        return queryset
+    queryset = Post.objects.all()
+    filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+    filterset_fields = ['group', ]
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
-
-    def perform_update(self, serializer):
         serializer.save(author=self.request.user)
 
 
@@ -41,8 +35,9 @@ class CommentViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
-    def perform_update(self, serializer):
-        serializer.save(author=self.request.user)
+#     def perform_create(self, serializer):
+#         serializer.save(author=self.request.user,
+#                         post=get_object_or_404(Post, id=self.kwargs['id']))
 
 
 class GroupViewSet(viewsets.ModelViewSet):
