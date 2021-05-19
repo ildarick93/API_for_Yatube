@@ -33,11 +33,8 @@ class CommentViewSet(viewsets.ModelViewSet):
         return queryset
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
-
-#     def perform_create(self, serializer):
-#         serializer.save(author=self.request.user,
-#                         post=get_object_or_404(Post, id=self.kwargs['id']))
+        serializer.save(author=self.request.user,
+                        post=get_object_or_404(Post, id=self.kwargs['id']))
 
 
 class GroupViewSet(viewsets.ModelViewSet):
